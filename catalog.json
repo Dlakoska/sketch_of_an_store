@@ -22,7 +22,7 @@
         "name": "Дрель",
         "description": "Сверлит дерево",
         "image": "",
-        "category": 3,
+        "category": 1,
         "price": 3000,
         "created_at": null,
         "updated_at": null
@@ -35,7 +35,7 @@
         "name": "Вискас",
         "description": "Корм для кошек",
         "image": "",
-        "category": 4,
+        "category": 2,
         "price": 57,
         "created_at": null,
         "updated_at": null
