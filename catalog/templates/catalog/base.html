@@ -179,7 +179,7 @@
 
 
 <header data-bs-theme="dark">
-    {% include 'includes/inc_menu.html' %}
+    {% include 'catalog/includes/inc_menu.html' %}
 </header>
 
 <main>
@@ -206,8 +206,9 @@
                 <div class="col-6 col-md">
                     <h5>Навигация по сайту</h5>
                     <ul class="list-unstyled text-small">
-                        <li><a href="{% url 'catalog:home'%}" class="text-white">Главная</a></li>
-                        <li><a href="{% url 'catalog:product_list'%}" class="text-white">Все продукты</a></li>
+                        <li><a href="{% url 'catalog:home'%}" class="text-black">Главная</a></li>
+                        <li><a href="{% url 'catalog:product_list'%}" class="text-black">Все продукты</a></li>
+                        <li><a href="{% url 'blog:blog_list'%}" class="text-black">Блог</a></li>
                     </ul>
                 </div>
                 <div class="col-6 col-md">
@@ -219,7 +220,7 @@
                 <div class="col-6 col-md">
                     <h5>О нас</h5>
                     <ul class="list-unstyled text-small">
-                        <li><a class="text-white" href="/contacts/">Контакты</a></li>
+                        <li><a class="text-black" href="/contacts/">Контакты</a></li>
                     </ul>
                 </div>
             </div>
