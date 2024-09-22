@@ -1,32 +1,29 @@
-from django.shortcuts import render, get_object_or_404
+
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import TemplateView
 from catalog.models import Product
 
 
-def product_list(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, 'product_list.html', context)
+class ProductListView(ListView):
+    model = Product
 
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product,
-               'title': 'Главная'}
-    return render(request, 'product_detail.html', context)
+class ProductDetailView(DetailView):
+    model = Product
 
 
-def home(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        print(f'name: {name}, email: {email}')
-    return render(request, 'home.html')
+class HomePageView(TemplateView):
+    template_name = 'catalog/home.html'
 
 
-def contacts(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        print(f'имя: {name}, телефон: {phone}, сообщение:{message}')
-    return render(request, 'contacts.html')
+class ContactPageView(TemplateView):
+    template_name = 'catalog/contacts.html'
+
+#
+# def contacts(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         phone = request.POST.get('phone')
+#         message = request.POST.get('message')
+#         print(f'имя: {name}, телефон: {phone}, сообщение:{message}')
+#     return render(request, 'contacts.html')
