@@ -1,27 +1,39 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-<div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for product in object_list %}
-        <div class="col">
-            <div class="card shadow-sm">
-                <img src="{{ product.image  | media_filter }}">
-                <div class="card-body">
-                    <p class="card-text">{{ product.name }}</p>
-                    <p class="card-text">Описание: {{ product.description | truncatechars:100 }} </p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <a class="btn btn-primary" href="{% url 'catalog:product_detail' product.pk%}"
-                               role="button">Посмотреть товар</a>
+    <div class="container">
+        <div class="col-12">
+            <a class="btn btn-outline-primary mb-5" href="{% url 'catalog:product_create' %}">Добавить продукт</a>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for product in products_with_versions %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="{{ product.product.image  | media_filter }}" class="card-img-top"
+                                 style="height: 200px; width: auto; object-fit: contain;">
+                            {% if product.active_version %}
+                                <p class="m-lg-3"><strong>Текущая версия:</strong> {{ product.active_version.name }}</p>
+                            {% else %}
+                                <p class="m-lg-3"><strong>Текущая версия:</strong> Нет активной версии</p>
+                            {% endif %}
+                            <div class="card-body">
+                                <p class="card-text">Название: {{ product.product.name }}</p>
+                                <p class="card-text">Описание: {{ product.product.description | truncatechars:100 }} </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="{% url 'catalog:product_detail' product.product.pk %}"
+                                           role="button">Посмотреть товар</a>
+                                        <a class="btn btn-warning" href="{% url 'catalog:product_update' product.product.pk %}"
+                                           role="button">Изменить</a>
+                                        <a class="btn btn-danger" href="{% url 'catalog:product_delete' product.product.pk %}"
+                                           role="button">удалить</a>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-                </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-    </div>
 
-</div>
+        </div>
 {% endblock %}

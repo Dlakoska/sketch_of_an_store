@@ -2,10 +2,12 @@ from django.db import models
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Наименование категории",
-                            help_text="Введите название продукта")
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Наименование категории"
+    )
     description = models.TextField(
-        verbose_name="Описание категории", help_text="Введите описание категории"
+        verbose_name="Описание категории"
     )
 
     class Meta:
@@ -17,23 +19,38 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Наименование продукта",
-                            help_text="Введите название продукта")
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Наименование продукта"
+    )
     description = models.TextField(
-        verbose_name="Описание продукта", help_text="Введите описание продукта"
+        verbose_name="Описание продукта"
     )
     image = models.ImageField(
         upload_to="images/",
         blank=True,
         null=True,
-        verbose_name="Фото",
-        help_text="Загрузите фото товара",
+        verbose_name="Фото"
     )
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, verbose_name="Категория",
-                                 help_text="Введите категорию продукта", related_name='products', blank=True, null=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        verbose_name="Категория",
+        related_name="products",
+        blank=True,
+        null=True,
+    )
     price = models.IntegerField(verbose_name="Цена за покупку")
-    created_at = models.DateTimeField(blank=True, null=True, verbose_name="Дата создания(записи в БД)")
-    updated_at = models.DateTimeField(blank=True, null=True, verbose_name="Дата последнего изменения(записи в БД)")
+    created_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Дата создания(записи в БД)"
+    )
+    updated_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Дата последнего изменения(записи в БД)"
+    )
 
     class Meta:
         verbose_name = "Продукт"
@@ -42,3 +59,25 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Version(models.Model):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="название версии"
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name="продукт",
+        related_name="version"
+    )
+    version_number = models.PositiveIntegerField(verbose_name="Версия")
+    is_current = models.BooleanField(blank=True, null=True, verbose_name='текущая версия')
+
+    def __str__(self):
+        return f'Продукт - {self.product}, версия - {self.name}'
+
+    class Meta:
+        verbose_name = "Версия"
+        verbose_name_plural = "Версии"
