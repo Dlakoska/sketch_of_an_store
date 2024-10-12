@@ -37,6 +37,7 @@
                                                    role="button">Посмотреть товар</a>
                                                 {% if user.is_authenticated%}
                                                     <div class="btn-group">
+                                                    {% if product.product.owner.email == user.email %}
 
 
                                                     <a class="btn btn-warning"
@@ -45,6 +46,7 @@
                                                     <a class="btn btn-danger"
                                                        href="{% url 'catalog:product_delete' product.product.pk %}"
                                                        role="button">удалить</a>
+                                                        {% endif %}
                                                     </div>
                                                 {% endif %}
                                         </div>
