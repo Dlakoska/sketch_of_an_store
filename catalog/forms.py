@@ -13,7 +13,7 @@ class StyleFormMixin:
 class ProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
-        exclude = '__all__'
+        exclude = ['owner']
 
     stop_list = ['казино', 'криптовалюта', 'крипта', 'биржа',
                  'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
