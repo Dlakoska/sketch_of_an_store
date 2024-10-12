@@ -15,7 +15,3 @@ urlpatterns = [
     path('products/<int:pk>/delete', ProductDeleteView.as_view(), name='product_delete')
 
 ]
-# urlpatterns = [
-#     ,
-#     path('contacts/', contacts, name='contacts')
-# ]

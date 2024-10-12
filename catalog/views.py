@@ -1,4 +1,4 @@
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.forms import inlineformset_factory
@@ -24,11 +24,15 @@ class ProductListView(ListView):
         context_data['products_with_versions'] = products_with_versions
         return context_data
 
+
 class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
+
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
@@ -45,14 +49,28 @@ class ProductCreateView(CreateView):
     def form_valid(self, form):
         formset = self.get_context_data()['formset']
         self.object = form.save()
-        if formset.is_valid():
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save(commit=False)  # пока не сохраняем данные в базе
+            self.object.owner = self.request.user  # привязываем текущего пользователя к продукту
+            self.object.save()  # сохраняем данные в базе
+
             formset.instance = self.object
             formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
+
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
@@ -82,6 +100,9 @@ class ProductUpdateView(UpdateView):
 
 
 class ProductDeleteView(DeleteView):
+    login_url = "users:login"
+    redirect_field_name = "redirect_to"
+
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 
