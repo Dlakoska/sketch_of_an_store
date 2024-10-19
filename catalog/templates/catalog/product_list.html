@@ -37,16 +37,19 @@
                                                    role="button">Посмотреть товар</a>
                                                 {% if user.is_authenticated%}
                                                     <div class="btn-group">
-                                                    {% if product.product.owner.email == user.email %}
+                                                    {% if perms.catalog.can_edit_is_active and perms.catalog.can_edit_description and perms.catalog.can_edit_category or user == product.product.owner %}
 
 
                                                     <a class="btn btn-warning"
                                                        href="{% url 'catalog:product_update' product.product.pk %}"
                                                        role="button">Изменить</a>
+                                                        {% endif %}
+                                                    {% if product.product.owner == user or user.is_superuser %}
                                                     <a class="btn btn-danger"
                                                        href="{% url 'catalog:product_delete' product.product.pk %}"
                                                        role="button">удалить</a>
                                                         {% endif %}
+
                                                     </div>
                                                 {% endif %}
                                         </div>

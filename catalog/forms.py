@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 
 from catalog.models import Product, Version
 
@@ -7,10 +8,13 @@ class StyleFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            if isinstance(field, forms.BooleanField):
+                field.widget.attrs['class'] = 'form-check-input'
+            else:
+                field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, forms.ModelForm):
+class ProductForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Product
         exclude = ['owner']
@@ -55,4 +59,9 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
 
         return cleaned_data
 
+
+class ProductModeratorForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Product
+        fields = ('is_active', 'description', 'category')
 
