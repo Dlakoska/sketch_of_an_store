@@ -3,9 +3,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic.base import TemplateView
 from django.forms import inlineformset_factory
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
 from django.urls import reverse_lazy, reverse
 from django.core.exceptions import PermissionDenied
+
+from catalog.services import get_category_from_cache
 
 
 class ProductListView(ListView):
@@ -24,6 +26,10 @@ class ProductListView(ListView):
             })
         context_data['products_with_versions'] = products_with_versions
         return context_data
+
+    def get_queryset(self):
+        key = "product_list"
+        return get_category_from_cache(Product, key)
 
 
 class ProductDetailView(DetailView):
@@ -124,11 +130,10 @@ class HomePageView(TemplateView):
 class ContactPageView(TemplateView):
     template_name = 'catalog/contacts.html'
 
-#
-# def contacts(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         phone = request.POST.get('phone')
-#         message = request.POST.get('message')
-#         print(f'имя: {name}, телефон: {phone}, сообщение:{message}')
-#     return render(request, 'contacts.html')
+
+class CategoryListView(ListView):
+    model = Category
+
+    def get_queryset(self):
+        key = "category_list"
+        return get_category_from_cache(Category, key)
